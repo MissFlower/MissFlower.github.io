@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		div{
+			width: 800px;
+			height: 600px;
+			margin: 0 auto;
+		}
+	</style>
+	<script>
+		document.addEventListener('DOMContentLoaded',function(){
+			var oC=document.getElementById('c1');
+			var gd=oC.getContext('2d');
+			var W=800;
+			var H=600;
+			var points=[];
+			for (var i = 0; i < 50; i++) {
+				points.push(new create_point());
+			}
+			function create_point(){
+				// 点的位置
+				this.x=Math.random()*W;
+				this.y=Math.random()*H;
+				// 点的速度
+				this.vx=Math.random()*30-15;
+				this.vy=Math.random()*30-15;
+				// 随机颜色
+				var r=Math.random()*255>>0;
+				var g=Math.random()*255>>0;
+				var b=Math.random()*255>>0;
+				this.color='rgba('+r+','+g+','+b+',0.5)';
+				// 圆角大小
+				this.radius=Math.random()*20+22;
+			}
+			var x=100;
+			var y=100;
+			// 画点
+			function draw(){
+				// alert(1);
+				gd.globalCompositeOperation='source-over';
+				gd.fillStyle='rgba(0, 0, 0, .3)';
+				gd.fillRect(0,0,W,H);
+				gd.globalCompositeOperation='lighter';
+				for (var i = 0; i < points.length; i++) {
+					var p=points[i];
+					gd.beginPath();
+					var gradient=gd.createRadialGradient(p.x,p.y,0,p.x,p.y,p.radius);
+					gradient.addColorStop(0,'#fff');
+					gradient.addColorStop(0.4,'#fff');
+					gradient.addColorStop(0.4,p.color);
+					gradient.addColorStop(1,'#000');
+
+					gd.fillStyle=gradient;
+					gd.arc(p.x,p.y,p.radius,Math.PI*2,false);
+					gd.fill();
+					// 运动
+					p.x+=p.vx;
+					p.y+=p.vy;
+
+					if (p.x<-80) {
+						p.x=W+80;
+					}
+					if (p.y<-60) {
+						p.y=H+60;
+					}
+					if (p.x>W+80) {
+						p.x=-80;
+					}
+					if (p.y>H+60) {
+						p.y=-60;
+					}
+				}
+			}
+			setInterval(draw,30);
+		},false);
+	</script>
+</head>
+<body> 
+	<div>
+		<canvas height="600" width="800" id="c1"></canvas>
+	</div>
+</body>
+</html>
