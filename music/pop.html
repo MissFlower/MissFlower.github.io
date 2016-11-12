@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		body,html{
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+		}
+		#box{
+			width:100%;
+			height: 100%;
+			/*margin:-250px;*/
+			resize: both;
+			overflow: auto;
+			border:5px solid violet;
+			overflow: hidden;
+			/*position: absolute;
+			top: 10px;
+			left: 22%;*/
+			/*background: url('1.jpg') no-repeat;
+			background-size: contain;*/
+			background:-webkit-radial-gradient(center,circle,violet 0%,violet 10%,purple);
+			animation-fill-mode: forwards; 
+		}
+		.header{
+			width: 100%;
+			height: 50px;
+			background: indigo;
+			color: #fff;
+			font-size: 30px;
+			line-height: 50px;
+			text-align: center;
+		}
+		section{
+			width: 60px;
+			height: 20px;
+			position: absolute;
+			right: 0px;
+			top: 50px;
+		}
+		section img{
+			width: 20px;
+			height: 20px;
+			border:none;
+			float: left;
+			cursor: pointer;
+			border-radius: 50%;
+		}
+		.bor{
+			width: 25%;
+			border-radius: 5px;
+			border:3px solid yellow;
+			margin-top: 10px;
+			position: absolute;
+			left: 5px;
+			bottom: 20px;
+			margin-left: 10%;
+			text-align: center;
+		}
+		.bor input{
+			outline: none;
+			margin:1% 1%;
+			border-radius:3px;
+			border:none;
+			line-height: 20px;
+			width: 20%;
+		}
+		.bor #play{
+			width: 23px;
+			height: 23px;
+			background: url('play.png') no-repeat;
+			position: absolute;
+			left: 2px;
+			top: 5px;
+			cursor: pointer;
+		}
+		.aside{
+			width: 25%;
+			margin-top: 10px;
+			margin-left: 10%;
+			top:60px;
+			margin-bottom: 100px;
+		}
+		#ul1 li{
+			width: 100%;
+			height: 30px;
+			padding-left: 10px;
+			line-height: 30px;
+			cursor: pointer;
+			white-space: nowrap;
+			overflow:hidden;
+			text-overflow: ellipsis;
+			border-bottom: 1px dashed aqua;
+		}
+		#ul1 li.on{
+			background: url('play.gif') no-repeat 100% center;
+		}
+		audio{
+			width: 100%;
+			
+			background: yellow;
+		}
+		#div1{
+			width: 200px;
+			height: 200px;
+			position: absolute;
+			left: 50%;
+			top: 30%;
+			background: url('img/1.jpg');
+			border-radius: 50%;
+			border:1px solid blue;
+		}
+		@keyframes move{
+			to{
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+	<script src="data.js"></script>
+	<script>
+		window.onload=function(){
+			var oUl=document.querySelector('#ul1');
+			var oA=document.querySelector('#v1');
+			var oBox=document.querySelector('#box');
+			var aBox=document.querySelectorAll('.bor input');
+			var oHeader=document.querySelector('.header');
+			var oDiv1=document.querySelector('#div1');
+			var oPlay=document.querySelector('#play');
+			var aImg=document.querySelectorAll('section img');
+			
+			for (var i = 0; i < arr.length; i++) {
+				var oLi=document.createElement('li');
+				oLi.innerHTML=arr[i];
+				oUl.appendChild(oLi);
+			} 
+			var aLi=oUl.children;
+			var iNow=0;
+			for (var i = 0; i < aLi.length; i++) {
+				aLi[i].index=i;
+				aLi[i].ondblclick=function(){
+					iNow=this.index;
+					play();
+					oPlay.style.backgroundImage='url(pause.png)';
+					return false;
+				};
+			}
+			for (var i = 0; i < aBox.length; i++) {
+				aBox[i].playState=i;
+				aBox[i].onclick=function(){
+					for (var i = 0; i < aBox.length; i++) {
+						aBox[i].style.background='';
+						aBox[i].style.color='';
+					}
+					this.style.background='indigo';
+					this.style.color='blue';
+					oA.playState=this.playState+1;
+				};
+			}
+			// aBox[0].onclick=function(){oA.playState=1};
+			// aBox[1].onclick=function(){oA.playState=2};
+			// aBox[2].onclick=function(){oA.playState=3};
+			// aBox[3].onclick=function(){oA.playState=4};
+			oA.onended=function(){
+				clearInterval(timer);
+				switch (oA.playState){
+					case 1:
+						play();
+					break;
+					case 2:
+						iNow++;
+						play();
+					break;
+					case 3:
+						iNow=rnd(0,arr.length);
+						play();
+					break;
+					case 4:
+						iNow++;
+						if (iNow==arr.length) {
+							iNow=0;
+						}
+						play();
+					break;
+				}
+			};
+			function rnd(m,n){
+				return Math.floor(Math.random()*(n-m)+m);
+			}
+			var cur=0;
+			var timer=null;
+			function play(){
+				cur=0;
+				for (var i = 0; i < aLi.length; i++) {
+						aLi[i].className='';
+					}
+				oA.src='mp3/'+arr[iNow]+'.mp3';
+				oDiv1.style.background='url(img/'+rnd(1,12)+'.jpg)';
+				oA.play();
+				aLi[iNow].className='on';
+				clearInterval(timer); 
+				timer=setInterval(function(){
+					cur++;
+					oDiv1.style.transform='rotate('+cur/2+'deg)';
+				},30);
+				// oA.ontimeupdate=function(){
+				// oDiv1.style.transition='1s all linear';
+				// 	oDiv1.style.transform='rotate('+oA.currentTime*5+'deg)';
+				// };
+				// oDiv1.style.animation='4s move linear infinite';
+			}
+			// oA.onprogress=function(){
+			// 	alert(1)
+			// 	if(oA.paused) {
+			// 		alert(1)
+			// 		oDiv1.style.animation='none';
+			// 	}else{
+			// 		oDiv1.style.animation='4s move linear infinite';
+			// 	}
+			// };
+			setInterval(function(){
+				oHeader.style.color='rgb('+rnd(0,256)+','+rnd(0,256)+','+rnd(0,256)+')';
+			},2000);
+            window.onstorage = function(ev){
+                var json = JSON.parse(localStorage[ev.key]);
+                oBox.style.left = json.left+'px';
+                oBox.style.top = json.top+'px';
+            };
+
+            oHeader.onmousedown=function(ev){
+                var oEvent=ev || event;
+                var disX=oEvent.clientX-oBox.offsetLeft;
+                var disY=oEvent.clientY-oBox.offsetTop;
+              // alert(oBox.offsetLeft)
+                document.onmousemove=function(ev){
+                    var oEvent=ev || event;
+                    var x=oEvent.clientX-disX;
+                    var y=oEvent.clientY-disY;
+                    oBox.style.left=x+'px';
+                    oBox.style.top=y+'px';
+                    // console.log(x,y)
+                    localStorage.dragMsg = JSON.stringify({left:oBox.offsetLeft,top:oBox.offsetTop});
+                };
+                document.onmouseup=function(){
+                    document.onmousemove=null;
+                    document.onmouseup=null;
+                };
+                return false;
+            };
+            oPlay.onclick=function(){
+        		if(oA.paused) {
+					this.style.backgroundImage='url(pause.png)';
+					oA.play();
+					timer=setInterval(function(){
+						cur++;
+						oDiv1.style.transform='rotate('+cur/2+'deg)';
+					},30);
+					
+				}else{
+					this.style.backgroundImage='url(play.png)';
+					clearInterval(timer);
+					oA.pause();
+				}
+            };
+           	aImg[0].onclick=function(){
+           		oBox.style.animation='.5s min linear';
+           		oBox.style.animationFillMode='forwards';
+           	};
+		};
+	</script>
+</head>
+<body>
+	<div id="box">
+		<header class="header">烟花再美，不过昙花一现</header>
+		<section>
+			<img src="min.png" alt="">
+			<img src="max.png" alt="">
+			<img src="close.png" alt="">
+		</section>
+		<aside class="aside">
+			<ul id="ul1">
+			</ul>
+		</aside>
+		<div class="bor">
+			<audio src="mp3/1.mp3" controls id="v1" paused>
+			</audio>
+			<input type="button" value="单曲循环">
+			<input type="button" value="列表循环">
+			<input type="button" value="随机播放">
+			<input type="button" value="循环播放">
+			<span id="play"></span>
+		</div>
+		<div id="div1"></div>
+		<footer class="footer"></footer>
+	</div>
+</body>
+</html>
