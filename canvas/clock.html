@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body{
+			background: #ccc;
+		}
+		#box{
+			width: 300px;
+			height: 300px;
+			border:2px solid #000;
+			border-radius: 50%;
+			position: relative;
+			top: 100px;
+			left: 500px;
+			background:url(pan.png);
+			background-size: contain;
+		}
+		#box div{
+			transform-origin: center bottom;
+		}
+		#box #hour{
+			width: 16px;
+			height: 80px;
+			background: #000;
+			border-radius: 50% 50% 0 0;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: -80px 0 0 -8px;
+		}
+		#box #min{
+			width: 12px;
+			height: 100px;
+			background: indigo;
+			border-radius: 50% 50% 0 0;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: -100px 0 0 -6px;
+		}
+		#box #sec{
+			width: 8px;
+			height: 140px;
+			background: yellow;
+			border-radius: 50% 50% 0 0;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: -140px 0 0 -4px;
+			/*transition: 1s all ease;*/
+		}
+		#box #cap{
+			width: 16px;
+			height: 16px;
+			background: -webkit-radial-gradient(purple,orange);
+			border-radius: 50% 50%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin: -10px 0 0 -8px;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			var oH=document.querySelector('#hour');
+			var oM=document.querySelector('#min');
+			var oS=document.querySelector('#sec');
+
+			function clock(){
+				var oDate=new Date();
+				var h=oDate.getHours();
+				var m=oDate.getMinutes();
+				var s=oDate.getSeconds();
+				var mec=oDate.getMilliseconds();
+				console.log(mec)
+				// console.log(s)
+
+				oH.style.transform='rotate('+(h%12*30+m/60*30)+'deg)';
+				oM.style.transform='rotate('+(m*6+s*6/360*6)+'deg)';
+				oS.style.transform='rotate('+(s*6+mec/1000*6)+'deg)';
+			}
+			clock();
+			setInterval(clock,16);
+		};
+	</script>
+</head>
+<body>
+	<div id="box">
+		<div id="hour"></div>
+		<div id="min"></div>
+		<div id="sec"></div>
+		<div id="cap"></div>
+	</div>
+</body>
+</html>
