@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		body{
+			background: #000;
+		}
+		ul{
+			width: 133px;
+			height: 200px;
+			margin: 100px auto;
+			position: relative;
+			transform:perspective(1600px)rotateX(-10deg);
+			transform-style: preserve-3d;
+		}
+		ul li{
+			position: absolute;
+			top: 0;
+			left: 0;
+			transform:rotateY(0deg)translateZ(0px);
+			-webkit-box-reflect:below 10px -webkit-linear-gradient(top,rgba(0,0,0,0) 50%,rgba(0,0,0,1));
+			-webkit-box-shadow:0 0 10px #fff;
+			border-radius: 10px;
+		}
+	</style>
+	<script>
+		window.onload=function(){
+			var oUl=document.querySelector('#ul1');
+			var N=11;
+			for (var i = 0; i < N; i++) {
+				var oLi=document.createElement('li');
+				oLi.style.width=oUl.offsetWidth+'px';
+				oLi.style.height=oUl.offsetHeight+'px';
+				oUl.appendChild(oLi);
+				oLi.style.backgroundImage='url(img2/'+(i+1)+'.jpg)';
+				(function(oLi,i){
+					setTimeout(function(){
+						oLi.style.transition='1s all ease '+200*(N-i)+'ms';		
+						oLi.style.transform='rotateY('+360/N*i+'deg)translateZ(400px)';
+					},0);
+				})(oLi,i);
+			}
+			var aLi=oUl.children;
+			aLi[0].addEventListener('transitionend',move,false);
+			var y=0;
+			var x=-30;
+			function move(){
+				change(x/3,y/3);
+				document.onmousedown=function(ev){
+					var disX=ev.clientX-y;
+					var disY=ev.clientY+x;
+					document.onmousemove=function(ev){
+						y=ev.clientX-disX;
+						x=disY-ev.clientY;
+						change(x/3,y/3);
+					};
+					document.onmouseup=function(){
+						document.onmouseup=null;
+						document.onmousemove=null;
+					};
+					return false;
+				};
+			}
+			function change(x,y){
+				for (var i = 0; i < aLi.length; i++) {
+					aLi[i].style.transition='1s all linear';
+					aLi[i].style.transform='rotateY('+(360/N*i+y)+'deg) translateZ(400px)';
+					oUl.style.transition='1s all linear';
+					oUl.style.transform='perspective(1600px)rotateX('+x+'deg)';
+					// var d=360/N*i+y;
+					var scale=Math.abs(Math.abs((360/N*i+y)%360)-180)/180;
+					scale<0.4&&(scale=0.4);
+					aLi[i].style.opacity=scale;
+					// document.title=scale;
+				}
+			}
+		};
+	</script>
+</head>
+<body>
+	<ul id="ul1"></ul>
+</body>
+</html>
