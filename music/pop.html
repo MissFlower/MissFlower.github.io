@@ -214,21 +214,7 @@
 					cur++;
 					oDiv1.style.transform='rotate('+cur/2+'deg)';
 				},30);
-				// oA.ontimeupdate=function(){
-				// oDiv1.style.transition='1s all linear';
-				// 	oDiv1.style.transform='rotate('+oA.currentTime*5+'deg)';
-				// };
-				// oDiv1.style.animation='4s move linear infinite';
 			}
-			// oA.onprogress=function(){
-			// 	alert(1)
-			// 	if(oA.paused) {
-			// 		alert(1)
-			// 		oDiv1.style.animation='none';
-			// 	}else{
-			// 		oDiv1.style.animation='4s move linear infinite';
-			// 	}
-			// };
 			setInterval(function(){
 				oHeader.style.color='rgb('+rnd(0,256)+','+rnd(0,256)+','+rnd(0,256)+')';
 			},2000);
@@ -270,8 +256,8 @@
 					
 				}else{
 					this.style.backgroundImage='url(play.png)';
-					clearInterval(timer);
 					oA.pause();
+					clearInterval(timer);
 				}
             };
            	aImg[0].onclick=function(){
@@ -294,7 +280,7 @@
 			</ul>
 		</aside>
 		<div class="bor">
-			<audio src="mp3/1.mp3" controls id="v1" paused>
+			<audio src="mp3/千千阙歌.mp3" controls id="v1">
 			</audio>
 			<input type="button" value="单曲循环">
 			<input type="button" value="列表循环">
