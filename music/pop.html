@@ -76,7 +76,7 @@
 		.bor #play{
 			width: 23px;
 			height: 23px;
-			background: url('play.png') no-repeat;
+			background:none;
 			position: absolute;
 			left: 2px;
 			top: 5px;
@@ -204,11 +204,13 @@
 				cur=0;
 				for (var i = 0; i < aLi.length; i++) {
 						aLi[i].className='';
+						aLi[i].style.color='';
 					}
 				oA.src='mp3/'+arr[iNow]+'.mp3';
 				oDiv1.style.background='url(img/'+rnd(1,12)+'.jpg)';
 				oA.play();
 				aLi[iNow].className='on';
+				aLi[iNow].style.color='#fff';
 				clearInterval(timer); 
 				timer=setInterval(function(){
 					cur++;
@@ -246,8 +248,9 @@
             };
             oPlay.onclick=function(){
         		if(oA.paused) {
-					this.style.backgroundImage='url(pause.png)';
+					// this.style.backgroundImage='url(pause.png)';
 					oA.play();
+					aLi[iNow].style.color='#fff';
 					clearInterval(timer);
 					timer=setInterval(function(){
 						cur++;
@@ -255,7 +258,7 @@
 					},30);
 					
 				}else{
-					this.style.backgroundImage='url(play.png)';
+					// this.style.backgroundImage='url(play.png)';
 					oA.pause();
 					clearInterval(timer);
 				}
